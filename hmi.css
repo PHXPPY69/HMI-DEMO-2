@@ -1,0 +1,792 @@
+/* ──────────────────────────────────────────────────────────
+   TOKENS (ONE SOURCE OF TRUTH) — ปรับธีมได้จากตรงนี้ที่เดียว
+   ────────────────────────────────────────────────────────── */
+:root{
+  /* Base */
+  --bg:            #0b1320;
+  --panel:         #122033;
+  --edge:          #2a3e5c;
+  --ink:           #eaf1ff;
+  --muted:         #c2d2ee;
+  --accent:        #ffd54a;
+  --ok:            #A52A2A;
+  --danger:        #FFFF66;
+
+  /* Layout */
+  --btn-h:         400px;
+  --btn-h:         410px;
+  /* ENV card */
+  --env-bg:        #808fa6;
+  --env-br:        #6f7fa0;
+  --env-ink:       #ffffff;
+  --env-icon:      32px;
+
+  /* COUNT card */
+  --count-bg:      #808fa6;
+  --count-br:      #6f7fa0;
+  --count-chip-bg: #1b2c46;
+  --count-chip-ink:#ffffff;
+  --count-val:     #ffffff;
+
+  /* DONUT card + ring */
+  --donut-card-bg: #0b1320;
+  --donut-card-br: transparent;
+  --donut-track:   #6f7fa0;
+  --donut-ring:    #303952;   /* สีหลอด % */
+  --donut-text:    #ffffff;
+
+  /* Default CARD (ใช้กับ Order/Machine ต้นแบบ) */
+  --card-bg:       #39497d;
+  --card-br:       #2a3e5c;
+  --card-ink:      #eaf1ff;
+
+  /* CHART */
+  --chart-card-bg:  #0f1a2a;        /* ให้สีการ์ด = สีพื้นกราฟ */
+  --chart-card-br:  #0f1a2a;
+  --chart-ink:      #eaf1ff;
+  --chart-frame-bg: transparent;    /* กรอบในโปร่งใส */
+  --chart-frame-br: transparent;
+
+  /* MACHINE */
+  --machine-bg:     var(--card-bg);
+  --machine-br:     var(--card-br);
+  --machine-ink:    var(--card-ink);
+
+  /* ====================== CELLS — TOKENS ====================== */
+  /* SCALE & SIZE */
+  --cell-scale: .72;
+  --cell-y:     1.8;
+
+  --cell-w:   calc(200px * var(--cell-scale));
+  --cell-h:   calc(370px * var(--cell-scale));
+  --tank-h:   calc(280px * var(--cell-scale));
+  --tank-w:   calc(54px  * var(--cell-scale));
+  --rung-w:   calc(50px  * var(--cell-scale));
+  --tube-w:   calc(22px  * var(--cell-scale));
+  --pad-v:    calc(10px  * var(--cell-scale));
+  --cell-gap: calc(18px  * var(--cell-scale));
+
+  --font-h4:  calc(1.84rem * var(--cell-scale));
+  --font-pct: calc(.84rem   * var(--cell-scale));
+  --step-h:   calc(11px     * var(--cell-scale));
+
+  /* CARD THEME */
+  --cell-odd-bg:#d3d3d3;  --cell-odd-br:#c6c6c6;  --cell-odd-ink:#2A3E66;
+  --cell-even-bg:#808fa6; --cell-even-br:#39497d; --cell-even-ink:#ffffff;
+  --cell-even-pct:#e6eeff;
+
+  /* TANK/TUBE/FILL */
+  --tank-odd-bg:#AEB9CD;  --tank-odd-br:#8FA2C2;
+  --tank-even-bg:#7f90b1; --tank-even-br:#6f7fa0;
+
+  --tube-odd-bg:#F7F9FD;  --tube-odd-br:#3B4E86;      /* odd มีกรอบ */
+  --tube-even-bg:#3B4E86; --tube-even-br:transparent; /* even ทึบ */
+
+  --fill-odd:  linear-gradient(180deg,#1E2B56,#0E183B);
+  --fill-even: #ffffff;
+
+  /* STEPS (ทำให้ 1/3/5 เห็นขีดครบเหมือน 2/4/6) */
+  --steps-odd-bg:#7f90b1;  --steps-odd-br:#6f7fa0;
+  --steps-even-bg:#7f90b1; --steps-even-br:#6f7fa0;
+
+  --step-odd-normal:#dfe3ea; --step-odd-on:#2b3550; --step-odd-active:#2b3550;
+  --step-even-normal:#dfe3ea; --step-even-on:#2b3550; /* active = on */
+}
+
+/* ──────────────────────────────────────────────────────────
+   GLOBAL
+   ────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+.wrap{
+  padding: 18px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.mono{
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.sr-only{
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+
+/* Grid: left | center | right(cells) */
+.grid{
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 300px 1fr calc(var(--cell-w) * 3 + var(--cell-gap) * 2);
+  grid-template-rows: auto auto 1fr;
+}
+
+/* Base card */
+.card{
+  background: var(--card-bg);
+  border: 1px solid var(--card-br);
+  color: var(--card-ink);
+  border-radius: 18px;
+  box-shadow: 0 12px 26px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.pad{ padding: 14px; }
+
+/* ──────────────────────────────────────────────────────────
+   LEFT COLUMN
+   ────────────────────────────────────────────────────────── */
+.left{
+  grid-row: 1 / span 3;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  gap: 14px;
+  align-content: start;
+}
+
+/* ENV card (scoped variables so each card can override safely) */
+.env-card{
+  /* ค่าไอคอนเริ่มต้นของการ์ดนี้เท่านั้น (override รายใบได้) */
+  --env-icon: 32px;
+
+  background: var(--env-bg);
+  border-color: var(--env-br);
+  color: var(--env-ink);
+}
+
+.env-card .env{ 
+  display: grid; 
+  gap: 10px; 
+}
+
+.env-card .env .row{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+}
+
+.env-card .env .val{
+  margin-left: auto;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--env-ink);
+}
+
+.env-card .env-icon{
+  width: var(--env-icon);
+  height: var(--env-icon);
+  object-fit: contain;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.25));
+}
+
+/* === ENV — layout แบบตัวอย่าง (ไอคอนซ้าย / ตัวเลขใหญ่ขวา) === */
+.env-card{
+  /* ปรับขนาดได้จากตัวแปรชุดนี้ */
+  --env-icon: 65px;     /* ขนาดไอคอน */
+  --env-font: 42px;     /* ขนาดตัวเลข (26°C / 56%) */
+  --env-gap-v: 10px;    /* ช่องว่างระหว่าง 2 แถว */
+}
+
+.env-card .env{
+  gap: var(--env-gap-v);
+  padding: 12px 14px;               /* เผื่อพื้นที่รอบ ๆ หน่อย */
+}
+
+.env-card .env .row{
+  display: grid;
+  grid-template-columns: auto 1fr;  /* ไอคอน | ค่า */
+  align-items: center;
+  gap: 12px;
+  padding: 0;                        /* ไม่ต้องมีพื้นหลัง/กรอบในแถว */
+  border: 0;
+  box-shadow: none;
+}
+
+.env-card .env-icon{
+  width: var(--env-icon);
+  height: var(--env-icon);
+  object-fit: contain;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); /* ให้เด้งเล็กน้อย */
+}
+
+.env-card .env .val{
+  margin-left: 0;
+  justify-self: end;                 /* ชิดขวาแบบในภาพตัวอย่าง */
+  font-size: var(--env-font);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .02em;
+  color: var(--env-ink);
+  white-space: nowrap;               /* กันตัดบรรทัด */
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+/* ตัวเลือก: ทำเวอร์ชันใหญ่พิเศษได้ด้วยคลาสเสริม */
+.env-card.env-xl{ --env-icon:56px; --env-font:48px; }
+
+
+/* ── Size modifiers: ใส่คลาสนี้กับการ์ดที่ต้องการเท่านั้น ───────── */
+.env-card--lg { --env-icon: 48px; }  /* ไอคอนใหญ่ */
+.env-card--xl { --env-icon: 64px; }  /* ไอคอนใหญ่มาก */
+
+/* ขยายช่องไฟเล็กน้อยเมื่อใช้ไอคอนใหญ่ */
+.env-card--lg .env .row,
+.env-card--xl .env .row{
+  gap: 16px;
+  padding: 14px 16px;
+}
+
+/* COUNT card */
+.count-card{
+  padding: 12px 14px;
+  display: grid;
+  gap: 8px;
+  background: var(--count-bg);
+  border-color: var(--count-br);
+}
+.count-chip{
+  background: var(--count-chip-bg);
+  color: var(--count-chip-ink);
+  padding: 10px 16px;
+  border-radius: 14px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: .02em;
+}
+.count-value{
+  font-size: 1.05rem;
+  color: var(--count-val);
+  text-align: center;
+}
+
+/* DONUT card */
+.donut-only{
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  background: var(--donut-card-bg);
+  border-color: var(--donut-card-br);
+  box-shadow: none;
+}
+.donut-svg{ width: 200px; height: 200px; display: block; }
+.donut-only .donut-svg #donutText{ fill: var(--donut-text); }
+.donut-only .donut-svg circle:first-of-type{ stroke: var(--donut-track); } /* track */
+.donut-only .donut-svg #donutFill{ stroke: var(--donut-ring); }            /* ring */
+
+/* Buttons */
+.btns{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btn{
+  width: 100%;
+  height: var(--btn-h);
+  border: none;
+  border-radius: 14px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,.35);
+  appearance: none;
+  outline: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;s
+}
+.btn:focus{ outline: 0; }
+.btn-start{ background: var(--ok);     color: #FFFF66; }
+.btn-stop { background: var(--danger); color: #A52A2A; }
+/* ──────────────────────────────────────────────────────────
+   CENTER — Order / Chart / Machine
+   ────────────────────────────────────────────────────────── */
+.order{
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+.order .title{ font-weight: 900; font-size: 1.5rem; }
+.order .title b{ color: var(--accent); }
+.order .kv{
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 6px 12px;
+  font-weight: 800;
+}
+.order .k{ color: #d5e4ff; }
+.order .v{ color: #ffffff; }
+.badge{
+  background: #152640;
+  color: #ffdf76;
+  border: 1px solid #3a567f;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-weight: 900;
+  letter-spacing: .4px;
+}
+
+/* Chart (การ์ดให้สีเดียวกับพื้นกราฟ) */
+.chart.card{
+  background: var(--chart-card-bg);
+  border-color: var(--chart-card-br);
+  color: var(--chart-ink);
+  box-shadow: none;
+}
+.chart-head{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .9rem;
+  color: #dbe7ff;
+  margin: 6px 10px 2px;
+}
+.legend{ display: flex; gap: 12px; align-items: center; margin-left: auto; font-size: .8rem; }
+.legend .dot{ width: 10px; height: 10px; border-radius: 50%; }
+
+.chart-frame{
+  position: relative;
+  height: 200px;
+  margin: 8px 10px 12px;
+  background: var(--chart-frame-bg);
+  border: 1px solid var(--chart-frame-br);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.spark{ position: absolute; inset: 0; }
+.xaxis{
+  position: absolute;
+  bottom: 6px;
+  width: 100%;
+  text-align: center;
+  font-size: .8rem;
+  color: #dbe7ff;
+}
+
+/* เส้นกราฟ/ตัวอักษรใน SVG ให้ชัด ไม่เกิดเงา */
+.chart-frame svg polyline,
+.chart-frame svg path{
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  stroke-opacity: 1 !important;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-frame svg text{
+  fill: #dbe7ff !important;
+  paint-order: stroke fill;
+  stroke: rgba(11,19,32,.55);
+  stroke-width: 2px;
+}
+.chart-frame svg .grid line{ stroke: rgba(255,255,255,.08); }
+.chart-frame svg .area,
+.chart-frame svg .shadow,
+.chart-frame svg .glow{ display: none !important; }
+
+/* Machine */
+.machine.card{
+  background: var(--machine-bg);
+  border-color: var(--machine-br);
+  color: var(--machine-ink);
+}
+.machine{
+  grid-column: 2;
+  grid-row: 3;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.machine-head{
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--edge);
+  color: #bed1ef;
+  font-size: .9rem;
+}
+.machine-body{ position: relative; padding: 18px; }
+.machine-img{ position: relative; padding: 12px; }
+.machine-img img{ width: 100%; height: auto; display: block; }
+.marker{
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #2c6eff;
+  box-shadow: 0 0 0 2px #0b1526, 0 4px 10px rgba(0,0,0,.35);
+}
+.motor-tag{
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  background: #0e1930; border: 1px solid #36537f; color: #e8f2ff;
+  padding: 4px 8px; border-radius: 8px; font-size: .8rem; font-weight: 800;
+  box-shadow: 0 6px 14px rgba(0,0,0,.35); white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────────────────
+   RIGHT — CELLS
+   ────────────────────────────────────────────────────────── */
+.cells{
+  grid-column: 3;
+  grid-row: 1 / span 3;
+  display: grid;
+  align-content: start;
+  gap: var(--cell-gap);
+  grid-template-columns: repeat(3, var(--cell-w));
+}
+
+/* Cell card (ค่าเริ่มต้น = โทน odd) */
+.card.cell{
+  /* card */
+  --c-bg:   var(--cell-odd-bg);
+  --c-br:   var(--cell-odd-br);
+  --c-ink:  var(--cell-odd-ink);
+
+  /* tank/tube/fill */
+  --t-bg:   var(--tank-odd-bg);
+  --t-br:   var(--tank-odd-br);
+  --tube-bg:var(--tube-odd-bg);
+  --tube-br:var(--tube-odd-br);
+  --fill:   var(--fill-odd);
+
+  /* steps */
+  --s-bg:   var(--steps-odd-bg);
+  --s-br:   var(--steps-odd-br);
+  --step-n: var(--step-odd-normal);
+  --step-on:var(--step-odd-on);
+  --step-ac:var(--step-odd-active);
+
+  width: var(--cell-w);
+  height: calc(var(--cell-h) * var(--cell-y));
+  display: grid;
+  align-items: center;
+  gap: calc(12px * var(--cell-scale));
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr var(--tank-w) var(--rung-w) 1fr;
+  padding: calc(14px * var(--cell-scale));
+  border-radius: 18px;
+  background: var(--c-bg);
+  border: 1px solid var(--c-br);
+  color: var(--c-ink);
+}
+
+/* Header */
+.card.cell > div:first-child{
+  grid-column: 1 / -1;
+  text-align: center;
+  align-self: start;
+  padding-top: calc(6px * var(--cell-scale));
+}
+.card.cell h4{
+  margin: 0;
+  font-size: var(--font-h4);
+  font-weight: 800;
+  line-height: 1.1;
+}
+.card.cell .pct{
+  margin-top: 2px;
+  font-size: var(--font-pct);
+  color: #3F5887;
+}  /* ← ระวัง! ต้องจบด้วยปีกกาเท่านี้ ห้ามมีตัว s ต่อท้าย */
+
+/* Even → override ตัวแปรเป็นชุด even */
+.cells > .card.cell:nth-child(even){
+  --c-bg:   var(--cell-even-bg);
+  --c-br:   var(--cell-even-br);
+  --c-ink:  var(--cell-even-ink);
+
+  --t-bg:   var(--tank-even-bg);
+  --t-br:   var(--tank-even-br);
+  --tube-bg:var(--tube-even-bg);
+  --tube-br:var(--tube-even-br);
+  --fill:   var(--fill-even);
+
+  --s-bg:   var(--steps-even-bg);
+  --s-br:   var(--steps-even-br);
+  --step-n: var(--step-even-normal);
+  --step-on:var(--step-even-on);
+  --step-ac:var(--step-even-on);
+}
+.cells > .card.cell:nth-child(even) .pct{ 
+  color: var(--cell-even-pct); }
+/* ลบเส้นใต้ + ใช้สีตามการ์ด */
+.cells a.card.cell{ 
+  text-decoration:none; }
+/* (ตัวเลือก) โฟกัสสวยขึ้นเมื่อกด Tab มาที่การ์ด */
+.cells a.card.cell:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:18px;
+}
+/* Tank / Steps */
+.tank{
+  grid-column: 2;
+  justify-self: center;
+  align-self: center;
+  height: calc(var(--tank-h) * var(--cell-y));
+  width:  var(--tank-w);
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: var(--pad-v);
+  background: var(--t-bg);
+  border: 1px solid var(--t-br);
+}
+.tank .tube{
+  position: absolute;
+  left: calc((var(--tank-w) - var(--tube-w)) / 2);
+  top: var(--pad-v);
+  bottom: var(--pad-v);
+  width: var(--tube-w);
+  border-radius: 999px;
+  background: var(--tube-bg);
+  border: 8px solid var(--tube-br);
+}
+.tank .fill{
+  position: absolute;
+  left: calc((var(--tank-w) - var(--tube-w)) / 2);
+  bottom: var(--pad-v);
+  width: var(--tube-w);
+  height: 40%;
+  border-radius: 999px;
+  background: var(--fill);
+}
+.tank .thumb{ display: none; }
+
+.steps{
+  grid-column: 3;
+  justify-self: center;
+  align-self: center;
+  height: calc(var(--tank-h) * var(--cell-y));
+  width:  var(--rung-w);
+  border-radius: 14px;
+  padding: var(--pad-v) calc(10px * var(--cell-scale));
+  background: var(--s-bg);
+  border: 1px solid var(--s-br);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.steps span{
+  height: var(--step-h);
+  border-radius: 7px;
+  background: var(--step-n);
+}
+.steps span.on{     background: var(--step-on); }
+.steps span.active{ background: var(--step-ac); }
+
+/* Hover / focus */
+.cells .card.cell {
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.cells .card.cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.40);
+}
+.cells .card.cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 18px;
+}
+
+/* Tank / Steps use variables */
+.tank{
+  grid-column: 2;
+  justify-self: center;
+  align-self: center;
+  height: calc(var(--tank-h) * var(--cell-y));
+  width:  var(--tank-w);
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: var(--pad-v);
+  background: var(--t-bg);
+  border: 1px solid var(--t-br);
+}
+.tank .tube{
+  position: absolute;
+  left: calc((var(--tank-w) - var(--tube-w)) / 2);
+  top: var(--pad-v);
+  bottom: var(--pad-v);
+  width: var(--tube-w);
+  border-radius: 999px;
+  background: var(--tube-bg);
+  border: 8px solid var(--tube-br);
+}
+.tank .fill{
+  position: absolute;
+  left: calc((var(--tank-w) - var(--tube-w)) / 2);
+  bottom: var(--pad-v);
+  width: var(--tube-w);
+  height: 40%;
+  border-radius: 999px;
+  background: var(--fill);
+}
+.tank .thumb{ display: none; }
+
+.steps{
+  grid-column: 3;
+  justify-self: center;
+  align-self: center;
+  height: calc(var(--tank-h) * var(--cell-y));
+  width:  var(--rung-w);
+  border-radius: 14px;
+  padding: var(--pad-v) calc(10px * var(--cell-scale));
+  background: var(--s-bg);
+  border: 1px solid var(--s-br);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.steps span{
+  height: var(--step-h);
+  border-radius: 7px;
+  background: var(--step-n);
+}
+.steps span.on{     background: var(--step-on); }
+.steps span.active{ background: var(--step-ac); }
+
+/* ทำให้การ์ดเซลล์ดูเป็นปุ่มและเข้าถึงได้ด้วยคีย์บอร์ด */
+.cells .card.cell {
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+
+.cells .card.cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.40);
+}
+
+/* เส้นโฟกัสเวลากด Tab */
+.cells .card.cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 18px;
+}
+
+.cells .card.cell { cursor: pointer; }
+
+
+/* ──────────────────────────────────────────────────────────
+   Responsive
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 1500px) {
+  /* กำหนด max-width ให้ grid เพื่อให้มันไม่ยืดเต็มจอ และจัดกึ่งกลางด้วย margin:auto */
+  .grid {
+    max-width: 1180px;      /* ปรับค่าได้ตามต้องการ (ลอง 1100 / 1180 / 1200) */
+    width: 100%;
+    margin: 0 auto;         /* จัดกึ่งกลางหน้าจอ */
+    padding-left: 16px;     /* เว้นขอบซ้ายเล็กน้อย */
+    padding-right: 16px;    /* เว้นขอบขวาเล็กน้อย */
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  /* columns ของ .cells ที่คุณตั้งไว้แล้ว */
+  .cells {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+}
+
+@media (max-width: 1400px) {
+  /* กำหนด max-width ให้ grid เพื่อให้มันไม่ยืดเต็มจอ และจัดกึ่งกลางด้วย margin:auto */
+  .grid {
+    max-width: 1180px;      /* ปรับค่าได้ตามต้องการ (ลอง 1100 / 1180 / 1200) */
+    width: 100%;
+    margin: 0 auto;         /* จัดกึ่งกลางหน้าจอ */
+    padding-left: 16px;     /* เว้นขอบซ้ายเล็กน้อย */
+    padding-right: 16px;    /* เว้นขอบขวาเล็กน้อย */
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  /* columns ของ .cells ที่คุณตั้งไว้แล้ว */
+  .cells {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+}
+
+@media (max-width:1100px){
+  .grid{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .cells{
+    grid-column: 1;
+    grid-row: auto;
+    grid-template-columns: 1fr;
+  }
+}
+  .cells{ 
+    grid-template-columns: repeat(3, var(--cell-w)); 
+  }
+
+@media (max-width: 1100px) {
+
+  /* อยากได้ 3 คอลัมน์ชิดกัน (123 บน / 456 ล่าง) */
+  .cells {
+    display: grid;
+    /* บังคับ 3 คอลัมน์ ขนาดแต่ละ cell ตามตัวแปร --cell-w */
+    grid-template-columns: repeat(6, minmax(var(--cell-w), 1fr));
+    /* ให้แต่ละแถวสูงตามเนื้อหา (ไม่ยืดเท่าคอลัมน์ที่สูงสุด) */
+    grid-auto-rows: min-content;
+    /* gap: row-gap col-gap — ปรับค่าแนวตั้งเล็กลง */
+    gap: 8px 30px;              /* 8px แถวเว้น แถว, 12px ระหว่างคอลัมน์ */
+    justify-content: center;    /* ก้อนทั้งกลุ่มอยู่กึ่งกลางแนวนอน */
+    align-items: start;         /* ให้แต่ละ cell ชิดบนของเซลล์ */
+    align-content: start;       /* เริ่มก้อนจากบน ไม่กระจายลงล่าง */
+    width: 100%;
+    max-width: calc((var(--cell-w) * 3) + (var(--cell-gap) * 2)); /* จำกัดความกว้างรวม */
+    margin-left: 450px;
+    padding: 6px 0;
+    box-sizing: border-box;
+  }
+}
+  /* ปรับแต่ละ card ให้อยู่ต้นช่อง ไม่มีมาร์จิ้นแปลก ๆ */
+  .cells .card.cell {
+    width: var(--cell-w);
+    max-width: 100%;
+    margin: 0;                 /* ลบมาร์จิ้นเดิม */
+    padding-top: 8px;          /* ถ้าต้องการช่องบนเล็กน้อยให้ใช้ padding แทน margin */
+    padding-bottom: 8px;
+    align-self: start;         /* ป้องกันการ center/ stretch ที่ทำให้ช่องว่าง */
+    box-sizing: border-box;
+  }
+
+@media (max-width:700px) {
+  :root { --font-bump: 1.28; }
+
+  .order .title { font-size: calc(1.15rem * var(--font-bump)); }
+  .order .kv { font-size: calc(.9rem * var(--font-bump)); }
+
+  .env-card .env .val { font-size: calc(var(--env-font, 42px) * var(--font-bump) * 0.75); }
+  .donut-only .donut-svg #donutText { font-size: calc(10px * var(--font-bump)); }
+
+  .btn { font-size: calc(1.05rem * var(--font-bump)); }
+
+  .chart-head, .legend { font-size: calc(.75rem * var(--font-bump)); }
+  .xaxis { font-size: calc(.72rem * var(--font-bump)); }
+
+  .motor-tag { font-size: calc(.9rem * var(--font-bump)); }
+
+  .card.cell h4 { font-size: calc(1.05rem * var(--font-bump)); }
+  .card.cell .pct { font-size: calc(.95rem * var(--font-bump)); }
+  :root { --cell-scale: 0.7; }
+  /* สุดท้าย: ปรับความสูงปุ่มขั้นต่ำ ป้องกันตัวหนังสือล้น */
+  .btn { min-height: 100px; }
+}
+

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard • Overview</title>
+
+  <!-- ดึงโทนสี + token จากหน้าเดิม -->
+  <link rel="stylesheet" href="hmi.css" />
+  <link rel="stylesheet" href="hmi-down-scale.css"/>
+
+  <!-- สไตล์ของ Dashboard (จะอิงตัวแปรสีจาก hmi.css) -->
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body class="no-slidebar">
+  <aside class="sidebar">
+    <div class="logo">Dashboard</div>
+    <div class="search"><input type="text" placeholder="Search"></div>
+    <nav>
+      <ul>
+       <!-- <li class="active" onclick="location.href='dashboard.html'">Dashboard</li>-->
+        <li onclick="location.href='../index.html'">← BACK TO HMI</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="toolbar">
+      <div class="title">Sales / Operations Overview</div>
+      <div class="actions">
+      </div>
+    </header>
+
+    <section class="grid">
+    <!-- KPIs -->
+    <div class="card kpi ga-k1">
+        <div class="kpi-head">OEE</div>
+        <div class="kpi-body">
+        <div class="kpi-value" id="kpiOEE">--%</div>
+        <div class="kpi-meta"><span class="spark" id="sparkOEE"></span></div>
+        </div>
+    </div>
+
+    <div class="card kpi ga-k2">
+        <div class="kpi-head">Output Count</div>
+        <div class="kpi-body">
+        <div class="kpi-value" id="kpiCount">0</div>
+        <div class="kpi-meta"><span class="spark" id="sparkCount"></span></div>
+        </div>
+    </div>
+
+    <div class="card kpi ga-k3">
+        <div class="kpi-head">Temperature</div>
+        <div class="kpi-body">
+        <div class="kpi-value" id="kpiTemp">--°C</div>
+        <div class="kpi-meta"><span class="spark" id="sparkTemp"></span></div>
+        </div>
+    </div>
+
+    <div class="card kpi ga-k4">
+        <div class="kpi-head">Humidity</div>
+        <div class="kpi-body">
+        <div class="kpi-value" id="kpiHumi">--%</div>
+        <div class="kpi-meta"><span class="spark" id="sparkHumi"></span></div>
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="card ga-radar">
+        <div class="card-title">Cells Capability (1–3)</div>
+        <svg id="radar" viewBox="0 0 260 220"></svg>
+        <div class="legend small">
+        <span class="dot dot-a"></span> Cell 1
+        <span class="dot dot-b"></span> Cell 2
+        <span class="dot dot-c"></span> Cell 3
+        </div>
+    </div>
+
+    <div class="card ga-mini">
+        <div class="card-title">Count per Minute</div>
+        <svg id="miniPerMin" viewBox="0 0 320 160"></svg>
+    </div>
+
+    <div class="card ga-donut">
+        <div class="card-title">Account / Engagement</div>
+        <div class="donut-wrap">
+        <svg id="donut" viewBox="0 0 120 120"></svg>
+        <div class="donut-center">
+            <div class="donut-number" id="donutVal">--</div>
+            <div class="donut-label">OEE</div>
+        </div>
+        </div>
+    </div>
+
+    <!-- ★ New card เพื่อไม่ให้เว้นว่าง -->
+    <div class="card ga-summary">
+        <div class="card-title">Order Snapshot</div>
+        <table class="small-table">
+        <tbody>
+            <tr><td>Order</td><td id="sumOrder">—</td></tr>
+            <tr><td>Yarn</td><td id="sumYarn">—</td></tr>
+            <tr><td>Spool</td><td id="sumSpool">—</td></tr>
+            <tr><td>State</td><td id="sumState">—</td></tr>
+            <tr><td>Count/min</td><td id="sumCPM">—</td></tr>
+        </tbody>
+        </table>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="card ga-bar">
+        <div class="card-title">Motors vs Cells</div>
+        <div class="legend">
+        <span class="dot dot-dark"></span> Motor RPM (avg)
+        <span class="dot dot-accent"></span> Cell Fill (%)
+        </div>
+        <svg id="barMC" viewBox="0 0 520 220"></svg>
+    </div>
+
+    <div class="card ga-gauge">
+        <div class="card-title">Machine Status Score</div>
+        <div class="gauge-wrap">
+        <svg id="gauge" viewBox="0 0 260 160"></svg>
+        <div class="gauge-nps"><span id="npsVal">0.0</span></div>
+        </div>
+        <table class="small-table">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody id="npsTable"></tbody>
+        </table>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="card ga-area">
+        <div class="card-title">Trend: RPM(avg) vs Count</div>
+        <div class="legend">
+        <span class="dot dot-dark"></span> RPM(avg)
+        <span class="dot dot-accent"></span> Count
+        </div>
+        <svg id="areaDeals" viewBox="0 0 520 220"></svg>
+    </div>
+
+    <div class="card ga-rank">
+        <div class="card-title">Motors Ranking (RPM)</div>
+        <div class="rank-list" id="rankList"></div>
+    </div>
+    </section>
+
+  </main>
+
+  <script src="dashboard.js" defer></script>
+</body>
+</html>

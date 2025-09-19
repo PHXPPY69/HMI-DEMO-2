@@ -1,0 +1,191 @@
+:root {
+  /* Original design dimensions */
+  --design-w: 932;
+  --design-h: 430;
+  /* Initial scale */
+  --scale: 1;
+}
+
+.cell-page {
+  /* Scale from top-left corner */
+  transform-origin: top left;
+  /* Lock in design dimensions */
+  width: var(--design-w)px;
+  height: var(--design-h)px;
+  /* Apply dynamic scale */
+  transform: scale(var(--scale));
+  overflow: hidden;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Desktop Default ≥1500px
+   ────────────────────────────────────────────────────────── */
+.cells {
+  grid-template-columns: repeat(3, var(--cell-w));
+  justify-content: center;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Medium screen ≤1500px
+   ────────────────────────────────────────────────────────── */
+@media (max-width:1500px) {
+  .cells {
+    grid-template-columns: repeat(2, var(--cell-w));
+    justify-content: center;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Tablet ≤1100px
+   ────────────────────────────────────────────────────────── */
+@media (max-width:1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .cells {
+    grid-column: 1;
+    grid-row: auto;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Mobile (โทรศัพท์) ≤ 700px
+   ────────────────────────────────────────────────────────── */
+@media (max-width:700px) {
+  :root { --cell-scale: 0.65; }
+  .btn { min-height: 90px; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Mobile (โทรศัพท์) ≤ 480px
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  :root {
+    --cell-scale: 0.58;
+    --cell-gap:   calc(18px * var(--cell-scale));
+  }
+  
+  .env-card {
+    max-width: 370px;
+    padding: 6px 8px;
+  }
+  .env-card .env .row {
+    gap: 6px;
+    padding: 4px 6px;
+  }
+  .env-card .env-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .env-card .env .val {
+    font-size: 1rem;
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .cells {
+    display: grid;
+    grid-template-columns: repeat(3, var(--cell-w));
+    gap: var(--cell-gap);
+    max-width: calc((var(--cell-w) * 3) + (var(--cell-gap) * 2));
+    margin: 0 auto;
+    padding: 4px 0;
+  }
+
+  .cells .card.cell {
+    --c-bg: var(--cell-odd-bg);
+    width: calc(200px * var(--cell-scale));
+    height: calc(700px * var(--cell-scale));
+  }
+  
+  .tank {
+    position: relative;
+  }
+  .tank .tube {
+    position: absolute;
+    top: var(--pad-v);
+    bottom: var(--pad-v);
+    width: 14px;
+    background: var(--tube-bg);
+    border: 6px solid var(--tube-br);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .tank .fill {
+    position: absolute;
+    width: 8px;
+    height: calc(var(--fill-pct,40) * 1%);
+    background: var(--fill);
+    left: 50%;
+    transform: translateX(-50%);
+    transition: height .3s ease;
+  }
+
+  .motor-tag {
+    font-size: 13px;
+    padding: 1px 4px;
+  }
+
+  .btn {
+    height: 200px;
+    min-height: unset;
+  }
+
+  body {
+    font-size: 0.9rem;
+  }
+  .order .title { font-size: 1.2rem; }
+  .order .kv    { font-size: 0.8rem; }
+  .env-card .env .val { font-size: calc(var(--env-font,42px) * 0.6); }
+  .donut-only .donut-svg { width:150px; height:150px; }
+  .donut-only .donut-svg #donutText { font-size:10px; }
+  .btn { font-size:1rem; min-height:80px; }
+  .chart-head,
+  .legend,
+  .xaxis { font-size:0.7rem; }
+  .chart-frame { height:150px; }
+  .card.cell h4      { font-size:1rem;  }
+  .card.cell .pct    { font-size:0.85rem;}
+}
+
+/* ===== iPhone 14 Pro Max landscape ~ 932 x 430 ===== */
+@media (max-width: 932px) and (max-height: 430px) and (orientation: landscape) {
+  :root{
+    --cell-scale: 0.63;
+    --cell-gap:   calc(30px * var(--cell-scale));
+    --cell-y:     1.25;
+  }
+
+  .grid{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .cells{
+    grid-column: 1 / -1;
+    grid-row: auto;
+    display: grid;
+
+    /* 3 คอลัมน์ x 2 แถว */
+    grid-template-columns: repeat(6, var(--cell-w));
+    gap: var(--cell-gap);
+
+    max-width: calc(var(--cell-w)*3 + var(--cell-gap)*2);
+    margin: 0 auto !important;
+    justify-content: center;
+
+    /* ขยับซ้าย 60px */
+    transform: translateX(225px);
+  }
+
+  .card.cell{ padding: calc(10px * var(--cell-scale)); }
+  .card.cell h4{  font-size: calc(1.4rem * var(--cell-scale)); }
+  .card.cell .pct{font-size: calc(1.0rem * var(--cell-scale)); }
+}

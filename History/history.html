@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMI Dashboard - History</title>
+  <link rel="stylesheet" href="history.css">
+</head>
+<body>
+  <div class="wrap">
+    <h1>History Dashboard</h1>
+
+    <!-- Navigation -->
+    <div class="nav">
+      <button onclick="location.href='../index.html'">← BACK TO HMI</button>
+    </div>
+
+    <!-- Chart -->
+    <div class="card">
+      <h2>OEE History (%)</h2>
+      <div class="chart-frame">
+        <svg id="historyChart" viewBox="0 0 800 300"></svg>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+      <h2>Log Records</h2>
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Temp (°C)</th>
+            <th>Humi (%)</th>
+            <th>OEE (%)</th>
+            <th>Count (pcs)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- เติมข้อมูลจาก history.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="history.js"></script>
+</body>
+</html>

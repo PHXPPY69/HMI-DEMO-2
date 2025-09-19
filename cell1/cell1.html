@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cell • HMI</title>
+  <link rel="stylesheet" href="cell1.css" />
+</head>
+<body>
+<div class="wrap cell-page">
+
+  <!-- Header bar -->
+  <div class="cellbar">
+    <a class="btn-back" href="../index.html">← กลับหน้าแรก</a>
+    <div class="title">Cell <span id="cellId">1</span></div>
+    <div class="pill" id="cellState">RUNNING</div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="cell-grid">
+
+    <!-- ซ้ายบน: จำนวนที่กรอได้ -->
+    <section class="card count-card card--count">
+      <div class="count-chip">จำนวนที่กรอได้</div>
+      <div class="count-value mono" id="patchDone">0 pcs</div>
+      <div class="sr-only">
+        เป้าหมาย: <span id="patchTarget">0</span>
+        อัตราผลิต: <span id="rate">0</span>
+        คาดเสร็จ: <span id="eta">--:--</span>
+      </div>
+    </section>
+
+    <!-- กลางบน: Temp / Humidity -->
+    <section class="card pad env-card env-xl card--env">
+      <div class="env">
+        <div class="row">
+          <img class="env-icon" src="icon/Temp.png" alt="Temperature" />
+          <span class="val mono" id="temp">--°C</span>
+        </div>
+        <div class="row">
+          <img class="env-icon" src="icon/Humidity.png" alt="Humidity" />
+          <span class="val mono" id="humi">--%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ขวาบน: ค่ากระบวนการ -->
+    <section class="card pad process process-xl card--proc">
+      <div class="kv mono">
+        <div class="k">RPM :</div>        <div class="v" id="rpm">0</div>           <div class="t" id="tr-rpm">–</div>
+        <div class="k">Tension :</div>    <div class="v" id="tension">0 N</div>     <div class="t" id="tr-tension">–</div>
+        <div class="k">Line Speed :</div> <div class="v" id="speed">0 m/min</div>   <div class="t" id="tr-speed">–</div>
+        <div class="k">Torque :</div>     <div class="v" id="torque">0%</div>       <div class="t" id="tr-torque">–</div>
+      </div>
+
+      <div class="mini-stats mono">
+        <div>AVG Speed : <span id="avgSpeed">-</span> &nbsp; Tension AVG : <span id="avgTension">-</span></div>
+        <div>MIN Speed : <span id="minSpeed">-</span> &nbsp; Tension MIN : <span id="minTension">-</span></div>
+        <div>MAX Speed : <span id="maxSpeed">-</span> &nbsp; Tension MAX : <span id="maxTension">-</span></div>
+      </div>
+    </section>
+
+    <!-- ซ้ายกลาง: โดนัทเปอร์เซ็นต์ -->
+    <section class="card pad donut-only card--donut">
+      <svg id="donut" class="donut-svg" viewBox="0 0 42 42" aria-label="Progress">
+        <circle cx="21" cy="21" r="18" fill="none" stroke="#1f2e43" stroke-width="6"></circle>
+        <circle id="donutFill" cx="21" cy="21" r="18" fill="none" stroke="#7fb8ff" stroke-width="6"
+                stroke-dasharray="0 113" stroke-linecap="round" transform="rotate(-90 21 21)"></circle>
+        <text id="donutText" x="50%" y="50%" dominant-baseline="middle"
+              text-anchor="middle" font-size="12" font-weight="900" fill="#ffffff">--%</text>
+      </svg>
+    </section>
+
+    <!-- กลางกลาง: สถานะ / แจ้งเตือน -->
+    <section class="card pad alarms card--alarms">
+      <div class="title-sm" style="font-weight:900;">สถานะ / แจ้งเตือน</div>
+      <ul id="alarmList" class="list"></ul>
+    </section>
+
+    <!-- ขวากลาง (กินแถวล่าง): กราฟ -->
+    <section class="card pad chart card--chart">
+      <div class="chart-head">Speed / Tension (2 นาทีล่าสุด)</div>
+      <div class="chart-frame">
+        <svg id="spark" class="spark" viewBox="0 0 900 220" preserveAspectRatio="none"></svg>
+      </div>
+    </section>
+
+    <!-- ซ้ายล่าง: ปุ่มควบคุม -->
+    <section class="btns card--btns">
+      <button id="btnStart" class="btn btn-start">OVERVIEW</button>
+      <button id="btnStop"  class="btn btn-stop">HISTORY</button>
+    </section>
+
+  </div>
+</div>
+
+<script src="cell1.js" defer></script>
+</body>
+</html>

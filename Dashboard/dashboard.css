@@ -1,0 +1,244 @@
+/* ===================== 1) THEME CONFIG (EDIT COLORS HERE) ===================== */
+:root{
+  /* Base */
+  --bg:#0b1320; --panel:#122033; --edge:#2a3e5c;
+  --ink:#eaf1ff; --muted:#c2d2ee;
+
+  /* Accents / Status */
+  --accent:#ffd54a; --ok:#19c36e; --danger:#ff5a64; --warn:#ffd54a; --info:#7fb8ff;
+
+  /* Surfaces */
+  --card-bg:#0f1a2a; --card-br:#2a3e5c; --card-ink:#eaf1ff;
+  --input-bg:#0e1930; --hover-bg:#152640;
+  --btn-br:#36537f; --btn-br-hover:#4a6aa0;
+
+  /* Charts */
+  --dot-a:#7fb8ff; --dot-b:#ffd54a; --dot-c:#8b5cf6;
+  --spark-line:var(--dot-a);
+  --bar-a:var(--dot-a); --bar-b:var(--dot-b);
+  --area-a:var(--dot-a); --area-b:var(--dot-b);
+  --donut-track:#2a3e5c; --donut-fill:var(--accent);
+  --radar-grid:#2a3e5c; --axis:#2a3e5c; --tick:#c2d2ee;
+
+  /* Gauge */
+  --gauge-red:#e25c62; --gauge-yellow:#ffd54a; --gauge-green:#19c36e; --gauge-needle:#7fb8ff;
+
+  /* Layout tokens */
+  --card-radius:16px; --shadow:0 10px 24px rgba(7,16,33,.25);
+  --h-kpi:140px; --h-row2:400px; --h-row3:380px; --h-row4:380px;
+  --card-pad:20px;
+}
+
+/* ===================== 2) RESET / BASE ===================== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+}
+svg{width:100%;height:auto}
+
+/* ===================== 3) LAYOUT: Sidebar / Main / Toolbar ===================== */
+.sidebar{
+  position:fixed; left:0; top:0; bottom:0; width:240px;
+  background:var(--panel); border-right:1px solid var(--edge);
+  padding:16px 14px; overflow:auto; color:var(--ink); z-index:10;
+}
+.logo{font-weight:900;margin-bottom:12px}
+
+.search input{
+  width:100%; padding:10px 12px; border-radius:10px;
+  border:1px solid var(--edge); background:var(--input-bg); color:var(--ink);
+}
+
+.sidebar ul{list-style:none; padding:0; margin:12px 0}
+.sidebar li{
+  padding:10px 12px; border-radius:10px; color:var(--ink); cursor:pointer;
+}
+.sidebar li.active,.sidebar li:hover{ background:var(--hover-bg); }
+
+.main{ margin-left:240px; min-height:100vh; padding:18px 22px; }
+
+.toolbar{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.toolbar .title{ font-weight:900; }
+.toolbar .actions{ margin-left:auto; display:flex; gap:8px; }
+.toolbar button{
+  background:var(--input-bg); color:var(--ink);
+  border:1px solid var(--btn-br); border-radius:10px; padding:8px 12px; cursor:pointer;
+}
+.toolbar button:hover{ border-color:var(--btn-br-hover); }
+
+/* ===================== 4) COMPONENTS: Card / KPI / Legend / Tables / Ranking ===================== */
+.grid{ display:grid; gap:16px; grid-template-columns:repeat(12,1fr); }
+
+.card{
+  background:var(--card-bg); color:var(--card-ink);
+  border:1px solid var(--card-br); border-radius:var(--card-radius);
+  box-shadow:var(--shadow); padding:var(--card-pad);
+}
+.card-title{ font-weight:800; margin-bottom:8px; }
+
+/* KPI */
+.kpi{min-height:var(--h-kpi); grid-column:span 3;}
+.kpi-head{color:var(--muted);font-weight:700;margin-bottom:6px}
+.kpi-body{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.kpi-value{font-size:32px;font-weight:900}
+.kpi-meta{display:flex;align-items:center;gap:10px}
+.spark{width:110px;height:28px;border-radius:8px;display:inline-block;
+  background:linear-gradient(to top right,var(--card-bg),#14243d);
+}
+
+/* Legends / Dots */
+.legend{display:flex;gap:12px;align-items:center;color:var(--muted);margin-top:6px}
+.legend.small{font-size:.85rem}
+.dot,.dot-a,.dot-b,.dot-c{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot-a{background:var(--dot-a)} .dot-b{background:var(--dot-b)} .dot-c{background:var(--dot-c)}
+
+/* Tables */
+.small-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.9rem}
+.small-table th,.small-table td{border-top:1px solid var(--edge);padding:6px 8px;text-align:center}
+
+/* Ranking list */
+.rank-list{display:grid;gap:10px}
+.rank-item{
+  display:flex;align-items:center;gap:12px;
+  padding:8px; border:1px solid var(--edge); border-radius:12px; background:var(--card-bg);
+}
+.rank-idx{
+  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:var(--hover-bg); color:#ffdf76; font-weight:800;
+}
+.rank-name{font-weight:800} .rank-score{margin-left:auto;font-weight:900}
+
+/* ===================== 5) CHARTS: Donut / Gauge ===================== */
+/* Donut center */
+.donut-wrap{position:relative;max-width:280px;margin:auto}
+.donut-center{position:absolute;inset:0;pointer-events:none}
+.donut-number{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  font-size:32px; font-weight:900; line-height:1;
+}
+.donut-label{
+  position:absolute; left:50%; bottom:18px; transform:translateX(-50%);
+  font-size:12px; color:var(--muted);
+}
+
+/* Gauge center */
+.ga-gauge{ display:grid; grid-auto-rows:auto 1fr auto; }
+.gauge-wrap{
+  position:relative; place-self:center; width:min(100%,720px); margin:8px auto 0;
+}
+.gauge-nps{
+  position:absolute; inset:0; display:grid; place-items:center;
+  font-size:28px; font-weight:900; pointer-events:none;
+}
+
+/* Summary table in Order Snapshot */
+.ga-summary .small-table td:first-child{ color:var(--muted); text-align:left }
+.ga-summary .small-table td:last-child{ font-weight:800; text-align:right }
+
+/* ===================== 6) GRID AREAS / FIXED HEIGHTS ===================== */
+.radar{grid-column:span 3} .mini{grid-column:span 3} .donut{grid-column:span 3}
+.wide{grid-column:span 6} .gauge{grid-column:span 6} .ranking{grid-column:span 3}
+
+.grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-areas:
+    "k1 k2 k3 k4"
+    "radar mini donut summary"
+    "bar bar gauge gauge"
+    "area area rank rank";
+}
+.ga-k1{grid-area:k1} .ga-k2{grid-area:k2} .ga-k3{grid-area:k3} .ga-k4{grid-area:k4}
+.ga-radar{grid-area:radar} .ga-mini{grid-area:mini} .ga-donut{grid-area:donut} .ga-summary{grid-area:summary}
+.ga-bar{grid-area:bar} .ga-gauge{grid-area:gauge}
+.ga-area{grid-area:area} .ga-rank{grid-area:rank}
+
+.ga-radar,.ga-mini,.ga-donut,.ga-summary{min-height:var(--h-row2)}
+.ga-bar,.ga-gauge{min-height:var(--h-row3)}
+.ga-area,.ga-rank{min-height:var(--h-row4)}
+
+/* ===================== 7) RESPONSIVE ===================== */
+@media (max-width:1200px){
+  .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:
+      "k1 k2"
+      "k3 k4"
+      "radar donut"
+      "mini summary"
+      "bar bar"
+      "gauge gauge"
+      "area area"
+      "rank rank";
+  }
+  .kpi,.radar,.mini,.donut{grid-column:span 6}
+  .wide,.gauge{grid-column:span 12}
+  .ranking{grid-column:span 6}
+}
+@media (max-width:800px){
+  .sidebar{position:static;width:auto;height:auto}
+  .main{margin:0}
+  .grid{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "k1" "k2" "k3" "k4"
+      "radar" "mini" "donut" "summary"
+      "bar" "gauge" "area" "rank";
+  }
+  .kpi,.radar,.mini,.donut,.ranking{grid-column:span 6}
+  .wide,.gauge{grid-column:span 6}
+}
+
+/* ===================== 8) OPTIONAL: Alternating Card Colors ===================== */
+/* เปิดใช้เมื่ออยากให้การ์ดสลับเฉดอัตโนมัติ (A/B); ปรับเฉด B ได้ตามต้องการ */
+/*
+:root{ --card-a-bg:var(--card-bg); --card-a-br:var(--card-br);
+       --card-b-bg:#1a2740;       --card-b-br:#324766; }
+.grid>.card{
+  --this-card-bg:var(--card-a-bg); --this-card-br:var(--card-a-br);
+  background:var(--this-card-bg); border-color:var(--this-card-br);
+}
+.grid>.card:nth-of-type(even){
+  --this-card-bg:var(--card-b-bg); --this-card-br:var(--card-b-br);
+}
+.rank-item{ background:inherit; }
+.small-table th,.small-table td{ border-top-color:var(--this-card-br); }
+*/
+/* ===== เมื่อไม่มี sidebar ให้ main กว้างเต็ม ===== */
+body.no-sidebar .main{ margin-left: 0; }
+
+/* ซ่อน sidebar เผื่อยังไม่ลบใน HTML */
+body.no-sidebar .sidebar{ display:none !important; }
+
+/* ===== ปุ่ม BACK TO OVERVIEW ===== */
+.page-actions{
+  display:flex;
+  justify-content:flex-start;    /* ปุ่มชิดซ้ายตามตัวอย่าง */
+  margin: 4px 0 8px;
+}
+
+.btn-back{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  border-radius:12px;
+  text-decoration:none;
+
+  /* โทนสีให้ match ธีมเดิม */
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  color: var(--accent);
+  box-shadow: var(--shadow);
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.btn-back:hover{
+  filter: brightness(1.05);
+  border-color: var(--btn-br-hover);
+}
+
+/* ตัวอักษรบนปุ่มให้เล็กลงนิดตามภาพ */
+.btn-back{ font-size: 14px; }

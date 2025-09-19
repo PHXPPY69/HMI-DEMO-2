@@ -1,0 +1,184 @@
+/* ===================== TOKENS (ONE SOURCE OF TRUTH) ===================== */
+:root{
+  /* Palette */
+  --bg:#0b1320; --panel:#122033; --edge:#2a3e5c; --ink:#eaf1ff;
+  --muted:#c2d2ee; --accent:#ffd54a; --ok:#19c36e; --danger:#ff5a64;
+
+  /* Card & Chart */
+  --card-bg:#39497d; --card-br:#2a3e5c; --card-ink:#eaf1ff;
+  --chart-card-bg:#0f1a2a; --chart-card-br:#0f1a2a; --chart-ink:#eaf1ff;
+  --chart-frame-bg:transparent; --chart-frame-br:transparent;
+
+  /* ENV */
+  --env-bg:#808fa6; --env-br:#6f7fa0; --env-ink:#ffffff;
+
+  /* Sizes (ปรับที่นี่พอ) */
+  --radius:18px;
+  --gap:22px;
+  --pad:14px;
+  --btn-h:305px;            /* ปุ่มใหญ่ในเดสก์ท็อป */
+  --env-icon:56px;
+  --env-font:42px;
+
+  /* Grid widths (ปรับความกว้างคอลัมน์หลัก) */
+  --col-left:300px;   /* โดนัท/ปุ่ม */
+  --col-mid:360px;    /* ENV + สถานะ */
+  --col-right:1fr;    /* ค่ากระบวนการ + กราฟ */
+
+  /* Effects */
+  --shadow:0 12px 26px rgba(0,0,0,.35);
+  --shadow-sm:0 10px 20px rgba(0,0,0,.35);
+  --inset:inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+/* ===================== BASE ===================== */
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial
+}
+.wrap{padding:18px;max-width:1500px;margin:0 auto}
+.mono{font-variant-numeric:tabular-nums;font-family:ui-monospace,Menlo,Consolas,monospace}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+.cellbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.btn-back{background:#0e1930;color:var(--ink);border:1px solid #36537f;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:800}
+.title{font-size:clamp(1.2rem,1vw+1rem,1.6rem);font-weight:900;letter-spacing:.2px}
+.pill{margin-left:auto;background:#152640;color:#ffdf76;border:1px solid #3a567f;padding:6px 12px;border-radius:999px;font-weight:900}
+
+/* ===================== LAYOUT ===================== */
+.cell-page{ /* ตัวแปร layout อยู่ที่ :root เพื่อแก้ง่ายทั่วหน้า */ }
+
+.cell-grid{
+  display:grid; gap:var(--gap);
+  grid-template-columns: var(--col-left) var(--col-mid) var(--col-right);
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    "count  env   proc"
+    "donut  alarms proc"
+    "btns   chart  chart";
+  align-items:start;
+}
+
+/* bind areas */
+.card--count  { grid-area: count; }
+.card--env    { grid-area: env; }
+.card--proc   { grid-area: proc; }
+.card--donut  { grid-area: donut; }
+.card--alarms { grid-area: alarms; }
+.card--chart  { grid-area: chart; }
+.card--btns   { grid-area: btns; }
+
+/* ===================== COMPONENTS ===================== */
+/* Card base + variants */
+.card{
+  background:var(--card-bg); border:1px solid var(--card-br); color:var(--card-ink);
+  border-radius:var(--radius); box-shadow:var(--shadow), var(--inset);
+}
+.pad{padding:var(--pad)}
+
+.card--dark{ background:#0f1a2a; border-color:#0f1a2a }        /* ใช้ซ้ำในหลายจุด */
+.card--transparent{ background:transparent; border:none; box-shadow:none }
+
+/* Count */
+.count-card{ padding:var(--pad); display:grid; gap:10px }
+.count-card.card{ background:#0f1a2a; border-color:#0f1a2a }
+.count-chip{
+  background:#152640; color:#ffdf76; border:1px solid #3a567f;
+  border-radius:14px; padding:10px 14px; font-weight:900; text-align:center;
+}
+.count-value{ font-size:2rem; font-weight:900; text-align:center }
+
+/* Donut */
+.card--donut{ margin-top:-42px }
+.donut-only{
+  display:grid; place-items:center; min-height:300px;
+  background:#0b1320; border-color:transparent; box-shadow:none;
+}
+.donut-svg{ width:260px; height:260px; display:block }
+.donut-only circle:first-of-type{ stroke:#6f7fa0 } /* track */
+.donut-only #donutFill{ stroke:#1b2c46 }            /* ring */
+.donut-only #donutText{ fill:#fff }
+
+/* Buttons (Start/Stop) */
+.card--btns{ display:grid; grid-template-columns:1fr 1fr; gap:var(--gap) }
+.card--btns.card{ background:transparent; border:none; box-shadow:none; padding:0 }
+.btn{
+  width:100%; height:var(--btn-h);
+  border:none; border-radius:14px;
+  font-size:clamp(1rem, .6vw + .8rem, 1.3rem);
+  font-weight:900; cursor:pointer; box-shadow:var(--shadow-sm); appearance:none; outline:0;
+}
+.btn:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:14px }
+.btn-start{ background:#A52A2A;     color:#FFFF66 }
+.btn-stop { background:#FFFF66; color:#3a1214 }
+/* ENV */
+.env-card.card{ background:var(--env-bg); border-color:var(--env-br); color:var(--env-ink) }
+.env{ display:grid; gap:12px; padding:12px 14px }
+.env .row{ display:grid; grid-template-columns:auto 1fr; align-items:center; gap:12px }
+.env .env-icon{ width:var(--env-icon); height:var(--env-icon); object-fit:contain; filter:drop-shadow(0 1px 0 rgba(0,0,0,.25)) }
+.env .val{
+  justify-self:end; font-size:var(--env-font); font-weight:900; line-height:1; letter-spacing:.02em;
+  color:var(--env-ink); white-space:nowrap; text-shadow:0 1px 0 rgba(0,0,0,.25)
+}
+
+/* Process (ขวาบน) */
+.process-xl .kv{
+  display:grid; grid-template-columns: 200px 1fr 28px;
+  row-gap:18px; column-gap:14px; font-weight:800;
+  font-size:clamp(1.2rem, .9vw + .8rem, 1.8rem); line-height:1.6;
+}
+.process-xl .kv .k{ color:#d5e4ff; letter-spacing:.5px }
+.process-xl .kv .v{ color:#fff }
+.process-xl .kv .t{ color:#c2d2ee; text-align:center; font-size:clamp(1rem, .5vw + .8rem, 1.5rem) }
+.process-xl .mini-stats{ margin-top:12px; color:#dbe7ff; font-size:clamp(1rem, .4vw + .7rem, 1.3rem) }
+
+.card--proc{ min-height:382px } /* ปรับที่เดียวพอ */
+
+/* Alarms (กลางแถว 2) */
+.card--alarms{
+  min-height:182px; display:flex; flex-direction:column; justify-content:space-between;
+}
+.alarms .title-sm{
+  font-size:1.05rem; font-weight:900; color:#dbe7ff; margin-bottom:12px;
+}
+.alarms .list{
+  margin:0; padding:0; list-style:none; display:grid; gap:8px;
+}
+.alarms .list li{
+  background:#0f1a2a; border:1px solid #2b3f5f; border-radius:10px;
+  padding:42px 20px; font-size:1.1rem;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.alarms .ok{color:var(--ok)} .alarms .warn{color:var(--accent)} .alarms .err{color:var(--danger)}
+
+/* Chart */
+.card--chart{ margin-top:-75px; align-self:start }
+.chart.card{ background:var(--chart-card-bg); border-color:var(--chart-card-br); color:var(--chart-ink); box-shadow:none }
+.chart-head{ display:flex; align-items:center; gap:10px; font-size:.95rem; color:#dbe7ff; margin:6px 10px 2px }
+.chart-frame{
+  position:relative; height:305px;
+  margin:8px 10px 12px; background:var(--chart-frame-bg);
+  border:1px solid var(--chart-frame-br); border-radius:12px; overflow:hidden;
+}
+.spark{ position:absolute; inset:0 }
+.chart-frame svg polyline,.chart-frame svg path{
+  filter:none!important; mix-blend-mode:normal!important; stroke-opacity:1!important;
+  fill:none; stroke-linecap:round; stroke-linejoin:round;
+}
+.chart-frame svg text{
+  fill:#dbe7ff!important; paint-order:stroke fill; stroke:rgba(11,19,32,.55); stroke-width:2px
+}
+.chart-frame svg .grid line{ stroke:rgba(255,255,255,.08) }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:1100px){
+  .cell-grid{
+    grid-template-columns:1fr; grid-template-rows:auto;
+    grid-template-areas:
+      "count" "env" "proc" "donut" "alarms" "chart" "btns";
+    gap:16px;
+  }
+  .chart-frame{ height:300px }
+  :root{ --btn-h:200px } /* ลดขนาดปุ่มในจอเล็ก */
+}
