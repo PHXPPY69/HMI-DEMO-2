@@ -601,6 +601,28 @@ body{
   border-radius: 18px;
 }
 
+/* Hover/Active ให้เหมือนเอฟเฟกต์การ์ด cell */
+.btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.40);
+  filter: brightness(1.03);
+}
+.btn:active{
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(0,0,0,.35);
+}
+
+/* โฟกัสด้วยคีย์บอร์ด */
+.btn:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 18px;
+}
+
+/* ขนาดตัวอักษรปุ่มให้พอดี */
+.btn { font-size: 18px; }
+
+
 /* Tank / Steps use variables */
 .tank{
   grid-column: 2;
