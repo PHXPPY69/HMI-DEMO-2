@@ -1,0 +1,297 @@
+/* =========================================================
+   DASHBOARD RESPONSIVE — CLEAN OPTIMIZED VERSION
+   - ไม่มีความซ้ำซ้อน
+   - จัดกึ่งกลางเฉพาะการ์ด non-KPI เมื่อจอเล็ก
+   - 4 KPI (OEE, Output Count, Temperature, Humidity) คงเต็มแถว
+   ========================================================= */
+
+/* 0) Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+/* 1) Fluid font scale */
+html{ font-size: clamp(14px, 1.6vw, 16px); }
+
+/* 2) Base helpers */
+.sidebar{ will-change: transform; }
+.main{ min-height:100vh; }
+
+/* 3) KPI font scale */
+.kpi .kpi-value{ font-size: clamp(24px, 2.2vw + 12px, 32px); }
+
+/* 4) Card padding (tiny screens) */
+@media (max-width:640px){
+  :root{ --card-pad:16px; }
+  .card{ padding:var(--card-pad); }
+}
+
+/* 5) Large tablets (≤1200px): grid shrink + center non-KPI */
+@media (max-width:1200px){
+  .grid{ justify-content:center; gap:16px; }
+  .grid > .card:not(.ga-k1):not(.ga-k2):not(.ga-k3):not(.ga-k4){
+    justify-self:center;
+    width:100%;
+    max-width:540px;
+  }
+  .ga-radar,.ga-mini,.ga-donut,.ga-summary{ min-height: max(320px,42vh); }
+  .ga-bar,.ga-gauge{ min-height: max(300px,38vh); }
+  .ga-area,.ga-rank{ min-height: max(280px,36vh); }
+}
+
+/* 6) Tablets & big phones (≤992px): single column */
+@media (max-width:992px){
+  .grid{
+    grid-template-columns:1fr;
+    justify-items:center;
+  }
+
+  /* non-KPI */
+  .grid > .card:not(.ga-k1):not(.ga-k2):not(.ga-k3):not(.ga-k4){
+    width:100% !important;
+    max-width:520px;
+    margin-inline:auto;
+    grid-column:auto !important;
+  }
+
+  /* 4 KPI */
+  .grid > .ga-k1,
+  .grid > .ga-k2,
+  .grid > .ga-k3,
+  .grid > .ga-k4{
+    width:100% !important;
+    max-width:none !important;
+    justify-self:stretch !important;
+    grid-column:1 / -1 !important;
+  }
+
+  .card-title{ font-size:1.05rem; }
+}
+
+/* 7) Small phones (≤640px) */
+@media (max-width:640px){
+  .grid > .card:not(.ga-k1):not(.ga-k2):not(.ga-k3):not(.ga-k4){ max-width:440px; }
+  .legend{ gap:8px; flex-wrap:wrap; }
+  .donut-wrap{ max-width:220px; }
+  .donut-number{ font-size:26px; }
+}
+
+/* 8) Landscape phones (short height) */
+@media (max-height:430px) and (orientation:landscape){
+  .grid{ gap:12px; }
+  .card{ padding:12px; }
+  .kpi{ min-height:110px; }
+  .legend{ display:none; }
+  .small-table{ font-size:.8rem; }
+}
+
+/* 9) Touch devices */
+@media (pointer:coarse){
+  .sidebar li{ padding:12px 14px; }
+  .toolbar button{ padding:10px 14px; }
+  .search input{ padding:12px; }
+}
+
+/* 10) Phones (≤800px): sidebar fix */
+@media (max-width:800px){
+  body.no-slidebar .sidebar{
+    display:block !important;
+    position:static !important;
+    width:auto !important;
+    height:auto !important;
+    transform:none !important;
+  }
+  body.no-slidebar .main{ margin:0 !important; }
+
+  .toolbar{ gap:8px; margin-bottom:10px; }
+  .toolbar .title{ font-weight:800; font-size:1rem; }
+}
+
+/* 11) Print */
+@media print{
+  :root{
+    --bg:#fff; --panel:#fff; --edge:#e5e7eb;
+    --ink:#111827; --card-bg:#fff; --card-ink:#111827; --card-br:#e5e7eb;
+  }
+  body{ background:#fff; color:#111827; }
+  .sidebar{ display:none !important; }
+  .main{ margin:0 !important; padding:0; }
+  .grid{
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .card{ page-break-inside:avoid; box-shadow:none; border-color:#e5e7eb; }
+}
+
+/* 12) Fallback dots */
+.dot-dark{ background:var(--edge,#2a3e5c); }
+.dot-accent{ background:var(--accent,#ffd54a); }
+
+
+@media (max-width:1200px){
+  .grid{
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row dense;   /* ให้การ์ดไหลอัตโนมัติและอุดช่องว่าง */
+    gap:16px;
+  }
+
+  /* กำหนด span ของ card */
+  .kpi,
+  .radar,
+  .mini,
+  .donut,
+  .summary,
+  .ranking { 
+    grid-column: span 1;  /* ครึ่งแถว (2 คอลัมน์) */
+  }
+
+  .wide,
+  .bar,
+  .gauge,
+  .area { 
+    grid-column: span 2;  /* เต็มแถว */
+  }
+}
+
+/* 1) Fluid font scale */
+html{ font-size: clamp(14px, 1.6vw, 16px); }
+
+/* 2) Base helpers */
+.sidebar{ will-change: transform; }
+.main{ min-height:100vh; }
+
+/* 3) KPI font scale */
+.kpi .kpi-value{ font-size: clamp(24px, 2.2vw + 12px, 32px); }
+
+/* 4) Card padding (tiny screens) */
+@media (max-width:640px){
+  :root{ --card-pad:16px; }
+  .card{ padding:var(--card-pad); }
+}
+
+/* 5) Large tablets (≤1200px): 2 คอลัมน์แบบ masonry ไม่มีช่องว่าง */
+@media (max-width:1200px){
+  /* ใช้ multi-column แทน grid เพื่อให้ไหลอัดแน่น */
+  .grid{
+    display:block;           /* ปิดโหมด grid */
+    column-count: 2;         /* ← สองคอลัมน์ */
+    column-gap: 16px;        /* ระยะห่างคอลัมน์ */
+    padding: 0;
+  }
+  .grid > .card{
+    display: inline-block;   /* ให้ตกคอลัมน์ได้ */
+    width: 100%;
+    break-inside: avoid;     /* ไม่ให้การ์ดโดนตัดกลางคอลัมน์ */
+    margin: 0 0 16px;        /* ช่องว่างแนวตั้งระหว่างการ์ด */
+  }
+
+  /* ยกเลิกการจัดกึ่งกลาง/จำกัดความกว้างเดิมทั้งหมด */
+  .grid > .card:not(.ga-k1):not(.ga-k2):not(.ga-k3):not(.ga-k4){
+    justify-self: initial;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  /* (ถ้าการ์ดไหนสูงเกิน ลองลด min-height ทิ้งได้) */
+  .ga-radar,.ga-mini,.ga-donut,.ga-summary,
+  .ga-bar,.ga-gauge,.ga-area,.ga-rank{
+    min-height: auto;
+  }
+}
+
+/* 6) Tablets & big phones (≤992px): 1 คอลัมน์ */
+@media (max-width:992px){
+  .grid{
+    column-count: 1;     /* เหลือคอลัมน์เดียว */
+    column-gap: 0;
+  }
+  .grid > .card{
+    width: 100%;
+    margin: 0 0 12px;
+  }
+}
+
+
+/* 6) Tablets & big phones (≤992px): 1 คอลัมน์ (ไม่กึ่งกลาง) */
+@media (max-width:992px){
+  .grid{
+    grid-template-columns:1fr;
+    grid-auto-flow: row dense;
+    justify-items: stretch;             /* ยกเลิก center เดิม */
+    gap:16px;
+  }
+
+  /* ทุกการ์ดกว้างเต็มแถวเดียว */
+  .grid > .card{
+    width:100% !important;
+    max-width:none !important;
+    margin-inline:0 !important;
+    grid-column:auto !important;
+    justify-self:stretch !important;
+  }
+
+  .card-title{ font-size:1.05rem; }
+}
+
+/* 7) Small phones (≤640px) */
+@media (max-width:640px){
+  .legend{ gap:8px; flex-wrap:wrap; }
+  .donut-wrap{ max-width:220px; }
+  .donut-number{ font-size:26px; }
+}
+
+/* 8) Landscape phones (short height) */
+@media (max-height:430px) and (orientation:landscape){
+  .grid{ gap:12px; }
+  .card{ padding:12px; }
+  .kpi{ min-height:110px; }
+  .legend{ display:none; }
+  .small-table{ font-size:.8rem; }
+}
+
+/* 9) Touch devices */
+@media (pointer:coarse){
+  .sidebar li{ padding:12px 14px; }
+  .toolbar button{ padding:10px 14px; }
+  .search input{ padding:12px; }
+}
+
+/* 10) Phones (≤800px): sidebar fix */
+@media (max-width:800px){
+  body.no-slidebar .sidebar{
+    display:block !important;
+    position:static !important;
+    width:auto !important;
+    height:auto !important;
+    transform:none !important;
+  }
+  body.no-slidebar .main{ margin:0 !important; }
+
+  .toolbar{ gap:8px; margin-bottom:10px; }
+  .toolbar .title{ font-weight:800; font-size:1rem; }
+}
+
+/* 11) Print */
+@media print{
+  :root{
+    --bg:#fff; --panel:#fff; --edge:#e5e7eb;
+    --ink:#111827; --card-bg:#fff; --card-ink:#111827; --card-br:#e5e7eb;
+  }
+  body{ background:#fff; color:#111827; }
+  .sidebar{ display:none !important; }
+  .main{ margin:0 !important; padding:0; }
+  .grid{
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .card{ page-break-inside:avoid; box-shadow:none; border-color:#e5e7eb; }
+}
+
+/* 12) Fallback dots */
+.dot-dark{ background:var(--edge,#2a3e5c); }
+.dot-accent{ background:var(--accent,#ffd54a); }
